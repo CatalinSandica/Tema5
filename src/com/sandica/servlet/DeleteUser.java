@@ -14,26 +14,33 @@ import com.sandica.db.DBConnection;
 import com.sandica.model.Users;
 
 @WebServlet("/UsersList")
-public class UsersList extends HttpServlet {
+public class DeleteUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DBConnection con = new DBConnection();
    
-    public UsersList() {
+    public DeleteUser() {
         super();
         
     }
 
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Users> list = new ArrayList<Users>();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("get method: WebappJSP/add");
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String userid = request.getParameter("id");
+		
 		try {
-			list = con.getListFromDB("users");
+			con.deleteValuesFromDB("users", Integer.parseInt(userid));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		request.getSession().setAttribute("users", list);
-		request.getRequestDispatcher("/users.jsp").forward(request, response);
+		
+		
+		response.sendRedirect("/WebappJSP/users.jsp");
 	}
 
 

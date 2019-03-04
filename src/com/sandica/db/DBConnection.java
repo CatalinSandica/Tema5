@@ -85,6 +85,21 @@ public class DBConnection {
 		return resultSet;
 	}
 	
+	public List<Users> getListFromDBByID (String dbTable, int id) throws Exception {
+		List<Users> list = new ArrayList<Users>();
+		prepStatement = connection.prepareStatement("SELECT * FROM " + dbTable +" WHERE userID = ?");
+		prepStatement.setInt(1, id);
+		resultSet = prepStatement.executeQuery();		
+			while(resultSet.next()){		
+				String username = resultSet.getString("userName");
+				String password = resultSet.getString("userPass");
+				list.add(new Users(username,password));
+				}
+		
+			return list;
+		
+	}
+	
 	public void insertValuesInDB (String username, String password, String dbTable) throws Exception{
 		prepStatement = connection.prepareStatement("INSERT INTO "+dbTable+"(userName, userPass) values (?,?)");
 		prepStatement.setString(1,username);
